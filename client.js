@@ -2,7 +2,10 @@
 // Mesmas faixas das etiquetas do quadro:
 //   mais de 24h: sem cor · até 24h: amarelo · até 12h: laranja · até 4h: vermelho
 //   até 1h: roxo "🔥" · vencido: preto "⚠️ atrasado há ..."
-// Card com a data marcada como concluída não ganha selo. Atualiza a cada minuto.
+// Card com a data concluída ou na lista "Feito": verde "✅ entregue" (verde só para concluído,
+// como no Trello). O Power-Up não sabe a hora exata da conclusão, então não diz se foi no prazo.
+// Atualiza a cada minuto.
+const FEITO = 'Feito 🎉';
 
 function tempo(min) {
   const m = Math.abs(Math.round(min));
@@ -24,11 +27,12 @@ function selo(due) {
 }
 
 function selos(t, comTitulo) {
-  return t.card('due', 'dueComplete').then(card => {
-    if (!card.due || card.dueComplete) return [];
-    return [{
-      dynamic: () => Object.assign(selo(card.due), comTitulo ? { title: 'Prazo' } : {}, { refresh: 60 }),
-    }];
+  return Promise.all([t.card('due', 'dueComplete', 'idList'), t.lists('id', 'name')]).then(([card, listas]) => {
+    const lista = (listas.find(l => l.id === card.idList) || {}).name;
+    const titulo = comTitulo ? { title: 'Prazo' } : {};
+    if (card.dueComplete || lista === FEITO) return [Object.assign({ text: '✅ entregue', color: 'green' }, titulo)];
+    if (!card.due) return [];
+    return [{ dynamic: () => Object.assign(selo(card.due), titulo, { refresh: 60 }) }];
   });
 }
 
