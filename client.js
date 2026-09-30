@@ -51,6 +51,7 @@ function selos(t, comTitulo) {
   ]).then(([card, listas]) => {
     const lista = (listas.find(l => l.id === card.idList) || {}).name;
     const titulo = nome => (comTitulo ? { title: nome } : {});
+    if (/^(📌|📋)/.test((card.name || '').trim())) return [];   // cards fixos e modelo não ganham emblema
     if (card.dueComplete || lista === FEITO) return [Object.assign({ text: '🏆 entregue', color: 'green' }, titulo('Prazo'))];
     const saida = [];
     if (LISTAS_DOR.includes(lista)) {
