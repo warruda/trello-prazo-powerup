@@ -1,6 +1,6 @@
 // Power-Up "Prazo": mostra na frente do card, ao lado da data, quanto falta para a entrega.
 // Mesmas faixas das etiquetas do quadro:
-//   mais de 24h: sem cor · até 24h: verde · até 12h: amarelo · até 4h: vermelho
+//   mais de 24h: sem cor · até 24h: amarelo · até 12h: laranja · até 4h: vermelho
 //   até 1h: roxo "🔥" · vencido: preto "⚠️ atrasado há ..."
 // Card com a data marcada como concluída não ganha selo. Atualiza a cada minuto.
 
@@ -18,8 +18,8 @@ function selo(due) {
   if (min <= 0) return { text: `⚠️ atrasado há ${tempo(min)}`, color: 'black' };
   if (horas <= 1) return { text: `🔥 faltam ${tempo(min)}`, color: 'purple' };
   if (horas <= 4) return { text: `faltam ${tempo(min)}`, color: 'red' };
-  if (horas <= 12) return { text: `faltam ${tempo(min)}`, color: 'yellow' };
-  if (horas <= 24) return { text: `faltam ${tempo(min)}`, color: 'green' };
+  if (horas <= 12) return { text: `faltam ${tempo(min)}`, color: 'orange' };
+  if (horas <= 24) return { text: `faltam ${tempo(min)}`, color: 'yellow' };
   return { text: `faltam ${tempo(min)}`, color: null };
 }
 
