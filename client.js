@@ -46,7 +46,7 @@ function faltaDor(card) {
 
 function selos(t, comTitulo) {
   return Promise.all([
-    t.card('name', 'desc', 'due', 'dueComplete', 'idList', 'members', 'labels', 'checklists'),
+    t.card('name', 'desc', 'due', 'dueComplete', 'idList', 'members', 'labels', 'checklists', 'badges'),
     t.lists('id', 'name'),
   ]).then(([card, listas]) => {
     const lista = (listas.find(l => l.id === card.idList) || {}).name;
@@ -54,6 +54,10 @@ function selos(t, comTitulo) {
     if (/^(📌|📋)/.test((card.name || '').trim())) return [];   // cards fixos e modelo não ganham emblema
     if (card.dueComplete || lista === FEITO) return [Object.assign({ text: '🏆 entregue', color: 'green' }, titulo('Prazo'))];
     const saida = [];
+    // Combinado "Fazendo no começo": item do checklist marcado com o card ainda na Sprint Backlog
+    // é sinal de que o trabalho começou sem o card ser movido.
+    if (lista === 'Sprint Backlog' && (card.badges?.checkItemsChecked || 0) > 0)
+      saida.push(Object.assign({ text: '▶️ começou? mova para Fazendo', color: 'blue' }, titulo('Fazendo no começo')));
     if (LISTAS_DOR.includes(lista)) {
       const falta = faltaDor(card);
       if (falta.length) saida.push(Object.assign({ text: `🚧 falta: ${falta.join(', ')}`, color: 'lime' }, titulo('Pronto para começar?')));
