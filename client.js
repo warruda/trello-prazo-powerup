@@ -36,7 +36,9 @@ function faltaDor(card) {
   if (nome.startsWith('📌') || nome.startsWith('📋') || nome.startsWith('═')) return [];
   const falta = [];
   if ((card.desc || '').trim().length < 30) falta.push('descrição');
-  const itens = (card.checklists || []).reduce((n, cl) => n + (cl.checkItems || []).length, 0);
+  // Contagem de itens de checklist pelo resumo do card (badges): o Trello nem sempre entrega a lista
+  // completa de checklists ao Power-Up, e contar por ela marcava "falta: critérios" por engano.
+  const itens = (card.badges && card.badges.checkItems) || (card.checklists || []).reduce((n, cl) => n + (cl.checkItems || []).length, 0);
   if (!itens) falta.push('critérios');
   if (!(card.members || []).length) falta.push('responsável');
   if (!card.due) falta.push('data');
