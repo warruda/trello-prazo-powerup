@@ -4,11 +4,11 @@
 //   até 1h: roxo "🔥" · vencido: preto "⚠️ atrasado há ..."
 // Card com a data concluída ou na lista "Feito": verde "🏆 entregue" (verde só para concluído,
 // como no Trello). O Power-Up não sabe a hora exata da conclusão, então não diz se foi no prazo.
-// Definition of Ready: card em Sprint Backlog, A Fazer ou Fazendo sem os 5 itens (descrição,
+// Definition of Ready: card em Sprint Backlog ou Fazendo sem os 5 itens (descrição,
 // critérios de aceite, responsável, data, frente Clínica/AWTKD) ganha "🚧 falta: ..." escrito.
 // Atualiza a cada minuto.
 const FEITO = 'Feito 🎉';
-const LISTAS_DOR = ['Sprint Backlog', 'A Fazer', 'Fazendo'];
+const LISTAS_DOR = ['Sprint Backlog', 'Fazendo'];
 const FRENTES = ['Clínica', 'AWTKD'];
 
 function tempo(min) {
